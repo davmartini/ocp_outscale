@@ -1,0 +1,43 @@
+##### Outscale vars 
+outscale_ak:                                            #Outscale Access Key
+outscale_sk:                                   		#Outscale Secret Key
+outscale_region: 	                                #Outscale Region
+outscale_subregion:                                     #Outsacle AZ
+outscale_api_endpoint: 				        #Outscale API Endpoint
+outscale_sshkey_name:   				#SSH key used by your instances
+sg_id:
+
+##### Global vars
+domain_name:						#Your DNS domain
+coreos_omi_id:						#OMI ID used for OCP nodes
+infra_omi_id:   					#OMI ID used for INFRA VM
+
+##### infravm vars
+subnet_id_infravm:                                      #Subnet ID where is deployed Infra VM 
+infravm_ip:					        #Infravm IP you chosen
+infravm_flavor: 					#Infravm flavor
+infravm_remote_user:					#SSH user used by Ansible to connect to the infravm server
+haproxy_stat_pwd:					#HAProxy stats page password
+
+##### OCP clusters vars
+ocp_cluster_name:					#OCP Cluster name without special characters
+ocp_cluster_cidr:       				#OCP Cluster cidr
+ocp_service_cidr:					#OCP Cluster service cidr
+ocp_hostprefix:						#OCP Cluster host prefix
+ocp_networktype:					#OCP Cluster SDN Type
+ocp_pull_secret:                                        #OCP pull secret get on console.redhat.com with your Red hat account
+ocp_pub_sshkey:                                         #You SSH public key to access to OCP nodes
+ocp_private_sshkey_path:        			#Your SSH private key to place in your .ssh user directory
+
+## Master conf
+subnet_id_master:                                       #Subnet ID where is deployed OCP masters
+master_count: 3						#Number of OCP master nodes
+master_flavor:                                          #Flavor used for OCP masters
+
+## Worker conf
+subnet_id_worker:                                       #Subnet ID where is deployed OCP workers
+worker_count: 3						#Number of OCP worker nodes
+worker_flavor:                                          #Flavor used for OCP workers
+
+##### OCP GitOps
+enable_gitops: false				        #Install GitOps on your cluster : true or false

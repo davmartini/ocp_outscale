@@ -1,0 +1,24 @@
+apiVersion: v1
+baseDomain: {{ domain_name }}
+compute: 
+- hyperthreading: Enabled 
+  name: worker
+  replicas: {{ worker_count }} 
+controlPlane: 
+  hyperthreading: Enabled 
+  name: master
+  replicas: {{ master_count }}
+metadata:
+  name: {{ ocp_cluster_name }}
+networking:
+  clusterNetwork:
+  - cidr: {{ ocp_cluster_cidr }}
+    hostPrefix: {{ ocp_hostprefix }}
+  networkType: {{ ocp_networktype }}
+  serviceNetwork: 
+  - {{ ocp_service_cidr }}
+platform:
+  none: {} 
+fips: false 
+pullSecret: '{{ ocp_pull_secret }}' 
+sshKey: '{{ ocp_pub_sshkey }}'

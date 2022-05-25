@@ -1,0 +1,3 @@
+resources:
+- subscriptions.yaml
+- cluster-role-binding.yaml
