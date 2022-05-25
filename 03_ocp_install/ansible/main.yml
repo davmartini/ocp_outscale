@@ -112,9 +112,6 @@
         replace: '"version":"3.2.0"},"storage":{"files":[{"path":"/etc/hostname","mode":420,"contents":{"source":"http://169.254.169.254/latest/meta-data/tags/name"}}]}}'
         backup: no
 
-        #    - name: Add hostname configuration to worker ignition file
-        #shell: awk -i inplace  -v cuv1='"version":"3.2.0"}}' -v cuv2='"storage":{"files":[{"path":"/etc/hostname","mode":420,"contents":{"source":"http://169.254.169.254/latest/meta-data/tags/name"}}]},"version":"3.2.0"}}' '{gsub(cuv1,cuv2); print;}' ../terraform/files/worker_cloud-init.yaml
-
     - name: Init terraform
       shell: terraform -chdir=../terraform/ init
 
