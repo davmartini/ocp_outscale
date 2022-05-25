@@ -8,6 +8,8 @@ To install OCP in general, you have two methods :
 * IPI : Installer Provide Infrastructure
 * UPI : User Provide Infrastructure
 
+## 2. Architecture
+ 
 
 ## 3. Files organization description
 
@@ -15,7 +17,7 @@ To install OCP in general, you have two methods :
 * 02_ocp_create_network : files to create needed VPC and network components in your account automatically with Hashicorp Terraform
 * 03_ocp_install : files to create OpenShift Cluster in your Outscale account with end to end automation based on Ansible and Hashicorp Terraform
 
-## 2. What this automation do
+## 4. What this automation do
 
 * Deploy an infrastructure VM with :
 	- Web server based on Nginx to provide Ignition files to OCP RHOCS nodes
@@ -34,7 +36,7 @@ To give you an estimate, a cluster with 6 worker nodes takes around 10 - 30 min 
 
 **Note :** Today, this automation permit only to have master and worker nodes with dynamic IPs provided by 3DS Outscale (DHCP).
 
-## 3. Prerequisites
+## 5. Prerequisites
 
 - [ ] Your environment have Internet access
 - [ ] A 3DS Outscale space
@@ -53,7 +55,7 @@ To give you an estimate, a cluster with 6 worker nodes takes around 10 - 30 min 
 - [ ] A defined IP for your infravm (ex: 192.168.40.10). This server have a major role during deployment (DNS server & LB) and this IP is very important. This IP can be outside of the DHCP scope to haven't clash IP.
 	
 
-## 4. Deployment
+## 6. Deployment
 
 All steps must be done on your RHEL8 VM Bastion or your RHEL8 workstation connected to the Internet (to pull image) with direct access to your Nutanix cluster. 
 
@@ -130,41 +132,48 @@ ansible-navigator run ansible/main.yml -i ansible/inventory --eei quay.io/david_
 A the end of automatic deployment, all needed information to connet to your cluster will be printed (kubeconfig, URL, kubeadmin-passowrd). 
 > :heavy_exclamation_mark: Be sure to save these informations. If you lose them, you couldn't connect to your cluster and you will have no possibility to recover them
 
-## 5. Access to your custer
-You can access to you fresh installed cluster from your remote computer to define infravm IP as DNS server. You can also follow this steps bellow if you are on mac.
+## 7. Access to your custer from Mac OSX
+You can access to you fresh installed cluster from your remote computer to define send all requests to infravm EIP.
 
-* Create direcotry as root on your mac
+* Install dnsmasq
 ```
-sudo mkdir /etc/resolver/
-```
-
-* Create domain file where ${domain} is the domain you chosen during OCP deployment and ${infravmip} is the infravm IP you chosen.
-```
-sudo bash -c 'echo "nameserver ${infravmip}" > /etc/resolver/${domain}'
-example :
-sudo bash -c 'echo "nameserver 192.168.40.10" > /etc/resolver/domain.io'
+brew install dnsmasq
 ```
 
-* Verify your new DNS configuration on your computer
+* Show dnsmasq version
 ```
-scutil --dns 
----
-resolver #11
-  domain   : domain.io
-  nameserver[0] : 192.168.40.10
-  flags    : Request A records, Request AAAA records
-  reach    : 0x00000002 (Reachable)
----
+brew info dnsmasq
 ```
-All DNS requests concerning the domain **domain.io** will be forwarded to **192.168.40.10** DNS server 
 
-## 6. More information
+* Modify dnsmasq config file
+```
+vim /usr/local/etc/dnsmasq.conf
+conf-file=/Users/dmartini/.dnsmasq/dnsmasq.conf
+```
+
+* Create new config file
+```
+vim /Users/dmartini/.dnsmasq/dnsmasq.conf
+# *.ocpoutscale.local wildcard will be resolved as 127.0.0.1, including subdomains where 171.33.93.77 is infravm EIP
+address=/*.ocpoutscale.local/171.33.93.77 
+listen-address=127.0.0.1
+```
+
+* Restart dnsmasq
+```
+sudo brew services restart dnsmasq
+```
+
+* Add 127.0.0.1 as your first dns server in your Mac OSX network configuration
+
+
+## 8. More information
 
 * You can check needed variables with **vars.yaml.example** example.
 * You have access to HAProxy stats for each frontend on the URL : http://${Infra VM IP}:5000/stats. You will need to set a stats password in the vars file.
 * To access your cluster from a remote computer, you have to add infravm IP as DNS server in your own network configuration.
 
-## 7. Day 2 operation
+## 9. Day 2 operation
 
 * Enable a container registry for your OpenShift Cluster: [Registry configuration](https://docs.openshift.com/container-platform/4.9/installing/installing_platform_agnostic/installing-platform-agnostic.html#installation-registry-storage-config_installing-platform-agnostic)
 * Configure persistent storage for Monitoring stack: [Monitoring configuration](https://docs.openshift.com/container-platform/4.9/monitoring/configuring-the-monitoring-stack.html#configuring-persistent-storage)
