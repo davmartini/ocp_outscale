@@ -114,14 +114,13 @@ nameserver 10.42.32.10
 nameserver 10.42.32.11
 ```
 
-
-**10. Deploy your cluster with Ansible**
+**9. Deploy your cluster with Ansible**
 > :heavy_exclamation_mark: Before to deploy your cluster, be sure your have configured infravm IP as first DNS server in IPAM configuration of your AOS subnet.
 ```
 ansible-navigator run ansible/main.yml -i ansible/inventory --eei quay.io/david_martini/ocp_nuta:4.x -m stdout --pae false --lf /tmp/ansible-navigator.log
 ```
 
-**11. Cluster information**
+**10. Cluster information**
 
 A the end of automatic deployment, all needed information to connet to your cluster will be printed (kubeconfig, URL, kubeadmin-passowrd). 
 > :heavy_exclamation_mark: Be sure to save these informations. If you lose them, you couldn't connect to your cluster and you will have no possibility to recover them
