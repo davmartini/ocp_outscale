@@ -21,7 +21,7 @@ To install OCP in general, you have two methods :
 ## 4. What this automation do
 
 * Deploy an infrastructure VM with :
-	- Web server based on Nginx to provide Ignition files to OCP RHOCS nodes
+	- Web server based on Nginx to provide Ignition files to OCP RHCOS nodes
 	- A DNS server with all needed records for your OCP cluster (api, api-int, *.apps, etc...)
 	- A Load Balancer based on HAProxy as endpoint for the OCP cluster with 4 frontends
 
