@@ -100,14 +100,7 @@ cd $PATH/rh_nutanix_fr/ocp_install/
 vim ansible/vars/vars.yaml
 ```
 
-**8. Add infravm IP you chosen as DNS server on your Nutanix AHV network where you deploy your OCP cluster throught Prism interface. This IP must be the IP DNS server for the subnet**
-```
-Prism > Network & Security > Subnets > Select your network > Actions > Update
-```
-
-With this configuration, OCP nodes will request to infravm to resolve your cluster DNS records and install properly all needed.
-
-**9. Custom DNS on VM Bastion**
+**8. Custom DNS on VM Bastion**
 
 All the automation is embedded in a container and your don't need to install extra tools directly on your bastion. Howerver, this container or Execution Environment need to resolv OCP cluster records to install properly it.
 
@@ -176,7 +169,7 @@ sudo brew services restart dnsmasq
 
 ## 9. Day 2 operation
 
-* Enable a container registry for your OpenShift Cluster: [Registry configuration](https://docs.openshift.com/container-platform/4.9/installing/installing_platform_agnostic/installing-platform-agnostic.html#installation-registry-storage-config_installing-platform-agnostic)
-* Configure persistent storage for Monitoring stack: [Monitoring configuration](https://docs.openshift.com/container-platform/4.9/monitoring/configuring-the-monitoring-stack.html#configuring-persistent-storage)
-* Enable authentification provider: [Auth configuration](https://docs.openshift.com/container-platform/4.9/authentication/understanding-authentication.html)
+* Enable a container registry for your OpenShift Cluster: [Registry configuration](https://docs.openshift.com/container-platform/4.10/installing/installing_platform_agnostic/installing-platform-agnostic.html#installation-registry-storage-config_installing-platform-agnostic)
+* Configure persistent storage for Monitoring stack: [Monitoring configuration](https://docs.openshift.com/container-platform/4.10/monitoring/configuring-the-monitoring-stack.html#configuring-persistent-storage)
+* Enable authentification provider: [Auth configuration](https://docs.openshift.com/container-platform/4.10/authentication/understanding-authentication.html)
 * Migrate Load Balancer frontends and DNS records on your production equipments
