@@ -16,6 +16,9 @@ These different scripts are Hashicorp Terraform scripts used to deploy all cloud
 
 ## 3. Deploy all components with Terraform
 
+- Create a ssh key in your OutScale space
+![ssh-key](../docs/ocp-key.png)
+
 - Check Terraform version
 ```
 [root@workstation ~]# terraform version
@@ -35,34 +38,8 @@ Initializing provider plugins...
 - Installed outscale-dev/outscale v0.5.3 (signed by a HashiCorp partner, key ID 2EDF9494805B9D61)
 ```
 
-- Edit the variables.tf file with your OutScale data
+- Deploy components with Terraform and your OutScale vars
 ```
-[root@workstation 01_ocp_create_network]# vim variables.tf
-variable "access_key_id" {
-    description = "Your Outscale access key" **--> to modify**
-}
-variable "secret_key_id" {
-    description = "Your Outscale secret key"
-}
-variable "region" {
-    description = "Your Outscale region"
-}
-variable "vm_type" {
-    description = "The flavor used to deploy the bastion VM"
-}
-variable "image_id" {
-    description = "Image ID used to deploy the bastion VM"
-}
-variable "keypair_name" {
-    description = "keypaire name used for bastion VM"
-}
-variable "dns1_ip" {
-    description = "DNS server 1 IP"
-}
-variable "dns2_ip" {
-    description = "DNS server 2 IP"
-}
-variable "dns3_ip" {
-    description = "DNS server 3 IP"
-}
+[root@workstation 01_ocp_create_network]# terraform apply
+
 ```
