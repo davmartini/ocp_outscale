@@ -61,6 +61,7 @@ To give you an estimate, a cluster with 6 worker nodes takes around 10 - 30 min 
 
 ## 6. Ready to start?
 
-- **Step 01** : Create all network components in your 3DS OutScale space **->** [**01_ocp_create_network**](01_ocp_create_network/README.md)
-- **Step 02** : Create your RHCOS image in your 3DS OutScale account **->** [**02_ocp_packer_image**](02_ocp_packer_image/README.md)
-- **Step 03** : Deploy your OpenShift Cluster in your 3DS OutScale space **->** [**03_ocp_install**](03_ocp_install/README.md)
+- **Step 01** : Clone this repository **->** git clone https://github.com/davmartini/ocp_outscale.git
+- **Step 02** : Create all network components in your 3DS OutScale space **->** [**01_ocp_create_network**](01_ocp_create_network/README.md)
+- **Step 03** : Create your RHCOS image in your 3DS OutScale account **->** [**02_ocp_packer_image**](02_ocp_packer_image/README.md)
+- **Step 04** : Deploy your OpenShift Cluster in your 3DS OutScale space **->** [**03_ocp_install**](03_ocp_install/README.md)
