@@ -16,7 +16,8 @@ These different scripts are Hashicorp Terraform scripts used to deploy all cloud
 
 ## 3. Deploy all components with Terraform
 
-- Create a ssh key in your OutScale space
+- Create a ssh key in your OutScale space  
+
 ![ssh-key](../docs/ocp-key.png)
 
 - Check Terraform version
@@ -38,7 +39,8 @@ Initializing provider plugins...
 - Installed outscale-dev/outscale v0.5.3 (signed by a HashiCorp partner, key ID 2EDF9494805B9D61)
 ```
 
-- Deploy components with Terraform and your OutScale vars
+- Deploy components with Terraform and your OutScale vars.
+> :heavy_exclamation_mark: Reserve one IP for VM **ocpinfra01** and put this ip as DNS
 ```
 [root@workstation 01_ocp_create_network]# terraform apply
 
