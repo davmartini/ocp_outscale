@@ -1,4 +1,0 @@
-resources:
-- namespace.yaml
-- ntnx-operatorgroup.yaml
-- subscriptions.yaml

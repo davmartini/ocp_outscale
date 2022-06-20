@@ -1,4 +1,0 @@
-resources:
-- ntnx-secret.yaml
-- ntnx-instance.yaml
-- ntnx-csi-sc.yaml

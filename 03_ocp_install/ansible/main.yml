@@ -383,25 +383,6 @@
       when: enable_gitops|bool == true
       ignore_errors: true
 
-    - name: Install Nutanix CSI Operator on your cluster
-      shell: oc apply -k ../post-install/nutanix_csi/step01/
-      when: enable_nutanix_csi|bool == true
-      ignore_errors: true
-
-    - name: Waiting that Nutanix CSI Operator is deployed
-      shell: oc get deployments nutanix-csi-operator-controller-manager -n ntnx-system -o json |jq -r '.status.conditions[] | select(.type == "Available") | .status'
-      register: csiready
-      until: csiready.stdout == "True"
-      retries: 60
-      delay: 10
-      when: enable_nutanix_csi|bool == true
-      ignore_errors: true
-
-    - name: Configure Nutanix CSI Operator on your cluster
-      shell: oc apply -k ../post-install/nutanix_csi/step02/
-      when: enable_nutanix_csi|bool == true
-      ignore_errors: true
-
     - shell: cat files/openshift-install/auth/kubeconfig
       register: kubeconfig
 
