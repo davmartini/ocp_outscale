@@ -40,7 +40,7 @@ Initializing provider plugins...
 ```
 
 - Deploy components with Terraform and your OutScale vars.
-> :heavy_exclamation_mark: Reserve one IP for VM **ocpinfra01** and put this ip as DNS1
+> :heavy_exclamation_mark: Reserve one IP for VM **ocpinfra01** and put this ip as DNS1  
 > :heavy_exclamation_mark: For Bastion VM, you can choose Fedora OMI for test/qualif purpose or Red Hat Enterprise Linux OMI for production prupose
 ```
 root@workstation 01_ocp_create_network]# terraform apply
