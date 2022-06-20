@@ -60,7 +60,7 @@ variable "the_sg" {
 
 variable "omi_source" {
   type =  string
-  default = "$YOUR_SOURCE_OMI" --> Your source OMI (Fedore OMI for example : ami-f929abe8)
+  default = "$YOUR_SOURCE_OMI" --> Your source Fedora OMI (example : ami-f929abe8)
 }
 
 variable "ssh_path" {
@@ -79,3 +79,7 @@ variable "os_user" {
 ```
 [root@workstation 02_ocp_packer_image]# packer.io build .
 ```
+
+- Result
+
+![omi](../docs/omi.png)

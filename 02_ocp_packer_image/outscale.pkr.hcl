@@ -90,7 +90,6 @@ build {
   provisioner "shell" {
     inline = [
       "lsblk",
-      "sudo yum install epel-release -y",
       "sudo yum install coreos-installer jq screen wget -y",
       "wget -c https://mirror.openshift.com/pub/openshift-v4/x86_64/dependencies/rhcos/latest/rhcos-metal.x86_64.raw.gz",
       "sudo coreos-installer install --insecure -f rhcos-metal.x86_64.raw.gz -i /tmp/remote.ign /dev/sda",
