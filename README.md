@@ -51,8 +51,7 @@ To give you an estimate, a cluster with 6 worker nodes takes around 10 - 30 min 
 	- RHEL8 AppStream repo : rhel-8-for-x86_64-appstream-rpms
 	- AAP2 repo : ansible-automation-platform-2.1-for-rhel-8-x86_64-rpms
 - [ ] Ansible Execution Environment : 
-	- quay.io/david_martini/ocp_nuta:4.9 to deploy OCP4.9
-	- quay.io/david_martini/ocp_nuta:4.10 to deploy OCP4.10
+	- quay.io/david_martini/ocp_outscale:4.10 to deploy OCP4.10
 - [ ] One VM bastion used to deploy automation with :
 	- RHEL8
 	- podman
