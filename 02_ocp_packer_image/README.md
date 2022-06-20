@@ -70,7 +70,7 @@ variable "ssh_path" {
 
 variable "os_user" {
   type =  string
-  default = "$USER_USED_TO_CONNECT" --> User in your OMI used to connect by SSH
+  default = "$USER_USED_TO_CONNECT" --> User in your OMI used to connect by SSH (fedora for Fedora OMI)
 }
 ...
 ```
