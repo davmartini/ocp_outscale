@@ -40,7 +40,7 @@ Initializing provider plugins...
 ```
 
 - Deploy components with Terraform and your OutScale vars.
-> :heavy_exclamation_mark: Reserve one IP for VM **ocpinfra01** and put this ip as DNS
+> :heavy_exclamation_mark: Reserve one IP for VM **ocpinfra01** and put this ip as DNS1
 ```
 root@workstation 01_ocp_create_network]# terraform apply
 var.access_key_id
@@ -90,5 +90,18 @@ var.vm_type
 
 data.outscale_subregions.all-subregions: Reading...
 data.outscale_subregions.all-subregions: Read complete after 0s [id=terraform-20220620095043096700000001]
+...
+outscale_vm.vm-pub-aza: Still creating... [1m10s elapsed]
+outscale_vm.vm-pub-aza: Still creating... [1m20s elapsed]
+outscale_vm.vm-pub-aza: Creation complete after 1m23s [id=i-9cc0fb25]
+outscale_public_ip_link.public_ip_vm_link: Creating...
+outscale_public_ip_link.public_ip_vm_link: Creation complete after 1s [id=eipassoc-d12e31ba]
 
+Apply complete! Resources: 30 added, 0 changed, 0 destroyed.
 ```
+
+- Result 
+
+![instance](../docs/bastion.png)
+![vpc](../docs/vpc.png)
+![dhcp](../docs/dhcp.png)
