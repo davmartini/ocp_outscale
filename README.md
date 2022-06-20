@@ -57,7 +57,7 @@ To give you an estimate, a cluster with 6 worker nodes takes around 10 - 30 min 
 	- podman
 	- ansible-navigator
 	- Ansible Execution Environment with all tools needed by this automation scripts
-- [ ] A defined IP for your infravm (ex: 192.168.40.10). This server have a major role during deployment (DNS server & LB) and this IP is very important. This IP can be outside of the DHCP scope to haven't clash IP.
+- [ ] A defined IP for your ocpinfra01 (ex: 192.168.2.200). This server have a major role during deployment (DNS server & LB) and this IP is very important.
 
 ## 6. Ready to start?
 

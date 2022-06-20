@@ -115,7 +115,7 @@ nameserver 10.42.32.11
 ```
 
 **9. Deploy your cluster with Ansible**
-> :heavy_exclamation_mark: Before to deploy your cluster, be sure your have configured infravm IP as first DNS server in IPAM configuration of your AOS subnet.
+> :heavy_exclamation_mark: Before to deploy your cluster, be sure your have configured **ocpinfra01** VM as first DNS server in your DHCP optiont.
 ```
 ansible-navigator run ansible/main.yml -i ansible/inventory --eei quay.io/david_martini/ocp_nuta:4.x -m stdout --pae false --lf /tmp/ansible-navigator.log
 ```
