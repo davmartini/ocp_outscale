@@ -46,13 +46,18 @@ variable "ssh_path" {
   default = "$PRIVATE_KEY_PATH"
 }
 
+variable "os_user" {
+  type =  string
+  default = "$USER_USED_TO_CONNECT"
+}
+
 
 source "osc-bsusurrogate" "coreos" {
   region = var.region
   access_key = var.access_key
   secret_key = var.secret_key
   vm_type = "t2.medium"
-  ssh_username = "outscale"
+  ssh_username = var.os_user
   communicator = "ssh"
   ssh_keypair_name = var.keypair_name
   ssh_private_key_file = var.ssh_path

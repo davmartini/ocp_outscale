@@ -67,6 +67,11 @@ variable "ssh_path" {
   type =  string
   default = "$PRIVATE_KEY_PATH" --> The path of your private Key for your OutScale SSH Key 
 }
+
+variable "os_user" {
+  type =  string
+  default = "$USER_USED_TO_CONNECT" --> User in your OMI used to connect by SSH
+}
 ...
 ```
 
