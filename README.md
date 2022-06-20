@@ -38,8 +38,8 @@ To give you an estimate, a cluster with 6 worker nodes takes around 10 - 30 min 
 
 ## 4. Files organization description
 
-* **01_ocp_packer_image :** files to create RHCOS images with Hashicorp Packer
-* **02_ocp_create_network :** files to create needed VPC and network components in your account automatically with Hashicorp Terraform
+* **01_ocp_create_network :** files to create needed VPC and network components in your account automatically with Hashicorp Terraform*
+* **02_ocp_packer_image :** files to create RHCOS images with Hashicorp Packer
 * **03_ocp_install :** files to create OpenShift Cluster in your Outscale account with end to end automation based on Ansible and Hashicorp Terraform
 
 ## 5. Prerequisites
@@ -62,6 +62,6 @@ To give you an estimate, a cluster with 6 worker nodes takes around 10 - 30 min 
 
 ## 6. Ready to start?
 
-- **Step 01** : Create your RHCOS image in your 3DS OutScale account -> [**01_ocp_packer_image**](01_ocp_packer_image/README.md)
-- **Step 02** : Create all network components in your 3DS OutScale space -> [**02_ocp_create_network**](02_ocp_create_network/README.md)
-- **Step 03** : Deploy your OpenShift Cluster in your 3DS OutScale space -> [**03_ocp_install**](03_ocp_install/README.md)
+- **Step 01** : Create all network components in your 3DS OutScale space **->** [**01_ocp_create_network**](01_ocp_create_network/README.md)
+- **Step 02** : Create your RHCOS image in your 3DS OutScale account **->** [**02_ocp_packer_image**](02_ocp_packer_image/README.md)
+- **Step 03** : Deploy your OpenShift Cluster in your 3DS OutScale space **->** [**03_ocp_install**](03_ocp_install/README.md)
