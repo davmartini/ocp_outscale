@@ -58,7 +58,7 @@ To give you an estimate, a cluster with 6 worker nodes takes around 10 - 30 min 
 
 ## 6. Deployment
 
-All steps must be done on your RHEL8 VM Bastion or your RHEL8 workstation connected to the Internet (to pull image) with direct access to your Nutanix cluster. 
+All steps must be done on your RHEL8 VM Bastion or your RHEL8 workstation connected to the Internet (to pull image). 
 
 ✅ **Please read the entire documentation step by step to deploy without error**
 
@@ -91,12 +91,12 @@ podman pull quay.io/david_martini/ocp_nuta:4.x
 
 **6. Clone GIT repository on your RHEL8 VM Bastion**
 ```
-git clone https://github.com/davmartini/rh_nutanix_fr.git
+git clone https://github.com/davmartini/ocp_outscale.git
 ```
 
 **7. Go to GIT workspace and edit vars file with your configuration**
 ```
-cd $PATH/rh_nutanix_fr/ocp_install/
+cd $PATH/ocp_outscale/ocp_install/
 vim ansible/vars/vars.yaml
 ```
 
