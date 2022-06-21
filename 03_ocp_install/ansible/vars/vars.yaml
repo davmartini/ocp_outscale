@@ -31,7 +31,7 @@ ocp_private_sshkey_path:        			#Your SSH private key to place in your .ssh u
 
 ## Master conf
 subnet_id_master:                                       #Subnet ID where is deployed OCP masters
-master_count: 3						#Number of OCP master nodes
+master_count: 3						#Number of OCP master nodes (3 is the minimum for ETCD)
 master_flavor:                                          #Flavor used for OCP masters
 
 ## Worker conf
