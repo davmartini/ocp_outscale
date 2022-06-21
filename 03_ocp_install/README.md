@@ -10,7 +10,7 @@ To install OCP in general, you have two methods :
 
 ## 2. Architecture
  
- ![Schema](docs/ocp-3ds-outscale.svg)
+ ![Schema](../docs/ocp-3ds-outscale.svg)
 
 ## 3. Files organization description
 
