@@ -46,17 +46,7 @@ To give you an estimate, a cluster with 6 worker nodes takes around 10 - 30 min 
 
 - [ ] Your environment have Internet access
 - [ ] A 3DS Outscale space
-- [ ] Red Hat account with valid subscription (RHEL, AAP, OCP)
-	- RHEL8 BaseOS repo : rhel-8-for-x86_64-baseos-rpms
-	- RHEL8 AppStream repo : rhel-8-for-x86_64-appstream-rpms
-	- AAP2 repo : ansible-automation-platform-2.1-for-rhel-8-x86_64-rpms
-- [ ] Ansible Execution Environment : 
-	- quay.io/david_martini/ocp_outscale:4.10 to deploy OCP4.10
-- [ ] One VM bastion used to deploy automation with :
-	- RHEL8
-	- podman
-	- ansible-navigator
-	- Ansible Execution Environment with all tools needed by this automation scripts
+- [ ] One VM bastion used to deploy automation (deploy by step 02)
 - [ ] A defined IP for your ocpinfra01 (ex: 192.168.2.200). This server have a major role during deployment (DNS server & LB) and this IP is very important.
 
 ## 6. Ready to start?
