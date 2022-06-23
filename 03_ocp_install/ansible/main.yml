@@ -223,11 +223,11 @@
         - worker.ign
       become: yes
 
-    - name: Start service nginx, if not started
-      service:
-        name: nginx
-        state: restarted
-      become: yes
+ #   - name: Start service nginx, if not started
+ #     service:
+ #       name: nginx
+ #       state: restarted
+ #     become: yes
 
     - name: be sure bind is installed
       dnf:
