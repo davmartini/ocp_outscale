@@ -66,19 +66,44 @@ quay.io/david_martini/ocp_outscale  4.10        4d5921236f9e  2 months ago  1.63
 [root@ip-192-168-1-167 ~]# git clone https://github.com/davmartini/ocp_outscale.git
 ```
 
-**6. Go to GIT workspace and edit vars file with your configuration**
+**6. Generate SSH Key to access to your OCP nodes. This Key will be needed to complete vars file in next step**
+```
+[root@ip-192-168-1-167 ~]# ssh-keygen -t rsa
+Generating public/private rsa key pair.
+Enter file in which to save the key (/root/.ssh/id_rsa): /root/.ssh/ocpnode   
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /root/.ssh/ocpnode
+Your public key has been saved in /root/.ssh/ocpnode.pub
+The key fingerprint is:
+SHA256:UExItD9yVgoiiBuCyA55QXvO1FM22nPtg197JtJJrVk root@ip-192-168-1-4.ocpoutscale.local
+The key's randomart image is:
++---[RSA 3072]----+
+| .o  oo+*        |
+|=o o ..B.. .     |
+|X.+ + B o o .    |
+|++ * . = = o   . |
+|..  o . S . o o E|
+|       + . . = * |
+|            o B o|
+|             . + |
+|                 |
++----[SHA256]-----+
+```
+
+**7. Go to GIT workspace and edit vars file with your configuration**
 ```
 [root@ip-192-168-1-167 ~]# cd $PATH/ocp_outscale/03_ocp_install/
 [root@ip-192-168-1-167 ~]# vim ansible/vars/vars.yaml
 ```
 
-**7. Deploy your cluster with Ansible**
+**8. Deploy your cluster with Ansible**
 > :heavy_exclamation_mark: Before to deploy your cluster, be sure your have configured **ocpinfra01** VM as first DNS server in your DHCP option.
 ```
 ansible-navigator run ansible/main.yml -i ansible/inventory --eei quay.io/david_martini/ocp_outscale:4.10 -m stdout --pae false --lf /tmp/ansible-navigator.log
 ```
 
-**8. Cluster information**
+**9. Cluster information**
 
 A the end of automatic deployment, all needed information to connet to your cluster will be printed (kubeconfig, URL, kubeadmin-passowrd). 
 > :heavy_exclamation_mark: Be sure to save these informations. If you lose them, you couldn't connect to your cluster and you will have no possibility to recover them
