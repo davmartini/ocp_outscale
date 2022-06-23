@@ -27,7 +27,7 @@ ocp_hostprefix:						#OCP Cluster host prefix (default: 23)
 ocp_networktype:					#OCP Cluster SDN Type (default: OpenShiftSDN)
 ocp_pull_secret: ''                                       #OCP pull secret get on console.redhat.com with your Red hat account
 ocp_pub_sshkey: ''                                         #You SSH public key to access to OCP nodes
-ocp_private_sshkey_path: ''        			#Your SSH private key to place in your .ssh user directory
+ocp_private_sshkey_path: ''        			#Your OutScale SSH private key to place in your .ssh user directory to access to infravm
 
 ## Master conf
 subnet_id_master:                                       #Subnet ID where is deployed OCP masters (example: subnet-xxx)
