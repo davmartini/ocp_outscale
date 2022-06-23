@@ -199,8 +199,8 @@
     - name: Change Nginx port from 80 to 8080 for ipv4
       replace:
         path: /etc/nginx/nginx.conf
-        regexp: 'listen       80 default_server;'
-        replace: 'listen       8080 default_server;'
+        regexp: 'listen       80'
+        replace: 'listen       8080'
       become: yes
 
     - name : Change Nginx port from 80 to 8080 for ipv6
