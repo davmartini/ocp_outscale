@@ -1,7 +1,7 @@
 ###OCP temporay bootstrap
 resource "outscale_vm" "ocp-bootstrap" {
   image_id = "{{ coreos_omi_id }}"
-  vm_type = "{{ worker_flavor }}"
+  vm_type = "{{ master_flavor }}"
   security_group_ids = ["{{ sg_id }}"]
   keypair_name = "{{ outscale_sshkey_name }}"
   placement_subregion_name = "{{ outscale_subregion }}"
