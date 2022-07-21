@@ -77,7 +77,7 @@ variable "os_user" {
 
 - Create your OutScale RHCOS image
 ```
-[root@workstation 02_ocp_packer_image]# packer.io build .
+[root@workstation 02_ocp_packer_image]# packer build .
 ```
 
 - Result
