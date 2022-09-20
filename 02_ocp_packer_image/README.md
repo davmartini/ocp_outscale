@@ -60,7 +60,7 @@ variable "the_sg" {
 
 variable "omi_source" {
   type =  string
-  default = "$YOUR_SOURCE_OMI" --> Your source CentOS OMI (example : ami-0dd0ab23)
+  default = "$YOUR_SOURCE_OMI" --> Your source RHEL8 OMI (example : ami-e318c0cd)
 }
 
 variable "ssh_path" {
@@ -70,7 +70,7 @@ variable "ssh_path" {
 
 variable "os_user" {
   type =  string
-  default = "$USER_USED_TO_CONNECT" --> User in your OMI used to connect by SSH (outscale for this CentOS OMI)
+  default = "$USER_USED_TO_CONNECT" --> User in your OMI used to connect by SSH (outscale for this RHEL8 OMI)
 }
 ...
 ```
