@@ -55,10 +55,10 @@ ansible-navigator 2.1.0
 
 **4. Pull Ansible EE with all embedded tools on your bastion VM**
 ```
-[root@ip-192-168-1-167 ~]# podman pull quay.io/david_martini/ocp_outscale:4.10
+[root@ip-192-168-1-167 ~]# podman pull quay.io/david_martini/ocp_outscale:4.11
 [root@ip-192-168-1-167 ~]# podman images
 REPOSITORY                          TAG         IMAGE ID      CREATED       SIZE
-quay.io/david_martini/ocp_outscale  4.10        4d5921236f9e  2 months ago  1.63 GB
+quay.io/david_martini/ocp_outscale  4.11        4d5921236f9e  2 months ago  1.63 GB
 ```
 
 **5. Clone GIT repository on your bastion VM**
@@ -100,7 +100,7 @@ The key's randomart image is:
 **8. Deploy your cluster with Ansible**
 > :heavy_exclamation_mark: Before to deploy your cluster, be sure your have configured **ocpinfra01** VM as first DNS server in your DHCP option.
 ```
-ansible-navigator run ansible/main.yml -i ansible/inventory --eei quay.io/david_martini/ocp_outscale:4.10 -m stdout --pae false --lf /tmp/ansible-navigator.log
+ansible-navigator run ansible/main.yml -i ansible/inventory --eei quay.io/david_martini/ocp_outscale:4.11 -m stdout --pae false --lf /tmp/ansible-navigator.log
 ```
 
 **9. Cluster information**
@@ -151,7 +151,7 @@ sudo brew services restart dnsmasq
 
 ## 9. Day 2 operation
 
-* Enable a container registry for your OpenShift Cluster: [Registry configuration](https://docs.openshift.com/container-platform/4.10/installing/installing_platform_agnostic/installing-platform-agnostic.html#installation-registry-storage-config_installing-platform-agnostic)
-* Configure persistent storage for Monitoring stack: [Monitoring configuration](https://docs.openshift.com/container-platform/4.10/monitoring/configuring-the-monitoring-stack.html#configuring-persistent-storage)
-* Enable authentification provider: [Auth configuration](https://docs.openshift.com/container-platform/4.10/authentication/understanding-authentication.html)
+* Enable a container registry for your OpenShift Cluster: [Registry configuration](https://docs.openshift.com/container-platform/4.11/installing/installing_platform_agnostic/installing-platform-agnostic.html#installation-registry-storage-config_installing-platform-agnostic)
+* Configure persistent storage for Monitoring stack: [Monitoring configuration](https://docs.openshift.com/container-platform/4.11/monitoring/configuring-the-monitoring-stack.html#configuring-persistent-storage)
+* Enable authentification provider: [Auth configuration](https://docs.openshift.com/container-platform/4.11/authentication/understanding-authentication.html)
 * Migrate Load Balancer frontends and DNS records on your production equipments
