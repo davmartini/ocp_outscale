@@ -2,7 +2,7 @@ packer {
   required_plugins {
     outscale = {
       version = ">= 1.0.0"
-      source = "github.com/hashicorp/outscale"
+      source  = "github.com/outscale/outscale"
     }
   }
 }
@@ -52,7 +52,7 @@ variable "os_user" {
 }
 
 
-source "osc-bsusurrogate" "coreos" {
+source "outscale-bsusurrogate" "coreos" {
   region = var.region
   access_key = var.access_key
   secret_key = var.secret_key
@@ -82,7 +82,7 @@ source "osc-bsusurrogate" "coreos" {
 
 build {
   name    = "coreos-outscale"
-  sources = ["source.osc-bsusurrogate.coreos"]
+  sources = ["source.outscale-bsusurrogate.coreos"]
   provisioner "file" {
     source = "remote.ign"
     destination = "/tmp/remote.ign"
