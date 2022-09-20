@@ -60,7 +60,7 @@ variable "the_sg" {
 
 variable "omi_source" {
   type =  string
-  default = "$YOUR_SOURCE_OMI" --> Your source CentOS OMI (example : ami-1cda4f98)
+  default = "$YOUR_SOURCE_OMI" --> Your source CentOS OMI (example : ami-0dd0ab23)
 }
 
 variable "ssh_path" {
