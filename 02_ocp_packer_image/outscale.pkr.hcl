@@ -90,9 +90,12 @@ build {
   provisioner "shell" {
     inline = [
       "lsblk",
-      "sudo yum install coreos-installer jq screen wget -y",
+      "sudo yum search coreos",
+      "sudo yum install jq wget -y",
+      "wget -c https://mirror.openshift.com/pub/openshift-v4/clients/coreos-installer/latest/coreos-installer",
+      "sudo chmod +x coreos-installer",
       "wget -c https://mirror.openshift.com/pub/openshift-v4/x86_64/dependencies/rhcos/latest/rhcos-metal.x86_64.raw.gz",
-      "sudo coreos-installer install --insecure -f rhcos-metal.x86_64.raw.gz -i /tmp/remote.ign /dev/sda",
+      "sudo ./coreos-installer install --insecure -f rhcos-metal.x86_64.raw.gz -i /tmp/remote.ign /dev/sda",
       "lsblk"
     ]
   }
