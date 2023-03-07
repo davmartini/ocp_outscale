@@ -1,0 +1,21 @@
+//global options
+options {
+allow-query { any; };
+recursion yes;
+};
+
+//forward zone
+zone "{{ domain_name }}" IN {
+     type master;
+     file "/var/named/{{ domain_name }}.db";
+     allow-update { none; };
+     allow-query { any; };
+};
+
+//backward zone
+zone "${element(split(".", ip_infravm),2)}.${element(split(".", ip_infravm),1)}.${element(split(".", ip_infravm),0)}.in-addr.arpa" IN {
+     type master;
+     file "/var/named/{{ domain_name }}.rev";
+     allow-update { none; };
+     allow-query { any; };
+};

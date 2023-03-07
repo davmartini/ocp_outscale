@@ -1,0 +1,17 @@
+[infra]
+${ip_infravm}		ansible_ssh_private_key_file={{ ocp_private_sshkey_path }}	  ansible_user={{ infravm_remote_user }}
+
+[ocp_bootstrap]
+%{ for index, group in  ip_ocp-bootstrap~}
+${ip_ocp-bootstrap[index]}
+%{ endfor ~}
+
+[ocp_master]
+%{ for index, group in  ip_ocp-master~}
+${ip_ocp-master[index]}
+%{ endfor ~}
+
+[ocp_worker]
+%{ for index, group in  ip_ocp-worker~}
+${ip_ocp-worker[index]}
+%{ endfor ~}

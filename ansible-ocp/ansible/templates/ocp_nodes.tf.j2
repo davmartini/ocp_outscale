@@ -1,0 +1,54 @@
+###OCP temporay bootstrap
+resource "outscale_vm" "ocp-bootstrap" {
+  image_id = "{{ coreos_omi_id }}"
+  vm_type = "{{ master_flavor }}"
+  security_group_ids = ["{{ sg_id }}"]
+  keypair_name = "{{ outscale_sshkey_name }}"
+  subnet_id = "{{ subnet_id_master }}"
+  tags {
+    key = "name"
+    value = "{{ ocp_cluster_name }}-ocp-bootstrap"
+  }
+  user_data = base64encode("${data.template_file.user_data_bootstrap.rendered}")
+}
+
+
+###OCP masters
+resource "outscale_vm" "ocp-master" {
+  count = {{ master_count }}
+  image_id = "{{ coreos_omi_id }}"
+  vm_type = "{{ master_flavor }}"
+  security_group_ids = ["{{ sg_id }}"]
+  keypair_name = "{{ outscale_sshkey_name }}"
+  subnet_id = "{{ subnet_id_master }}"
+  tags {
+    key = "name"
+    value = "{{ ocp_cluster_name }}-ocp-master-${count.index}"
+  }
+  user_data = base64encode("${data.template_file.user_data_master.rendered}")
+}
+
+###OCP workers
+resource "outscale_vm" "ocp-worker" {
+  count = {{ worker_count }}
+  image_id = "{{ coreos_omi_id }}"
+  vm_type = "{{ worker_flavor }}"
+  security_group_ids = ["{{ sg_id }}"]
+  keypair_name = "{{ outscale_sshkey_name }}"
+  subnet_id = "{{ subnet_id_worker }}"
+  tags {
+    key = "name"
+    value = "{{ ocp_cluster_name }}-ocp-worker-${count.index}"
+  }
+  user_data = base64encode("${data.template_file.user_data_worker.rendered}")
+}
+
+output "ip_address_ocp_bootstrap" {
+  value = outscale_vm.ocp-bootstrap[*].private_ip
+}
+output "ip_address_ocp_master" {
+  value = outscale_vm.ocp-master[*].private_ip
+}
+output "ip_address_ocp_worker" {
+  value = outscale_vm.ocp-worker[*].private_ip
+}

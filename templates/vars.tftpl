@@ -1,0 +1,43 @@
+##### Outscale vars 
+outscale_ak: ${outscale_ak}                                           #Outscale Access Key
+outscale_sk: ${outscale_sk}                                    		#Outscale Secret Key
+outscale_region: ${outscale_region}	                                #Outscale Region (example: eu-west-2)
+
+outscale_sshkey_name:  ${ocp-key} 				#SSH key used by your instances (example: ocpkey)
+sg_id: ${outscale_sg}
+
+##### Global vars
+domain_name: ${domain_name}						#Your DNS domain (example: outscale.local)
+coreos_omi_id: ${coreos_omi}						#OMI ID used for OCP nodes (example: ami-xxxxx)
+
+
+##### infravm vars
+subnet_id_infravm: ${subnet_id_infravm}
+infra_omi_id: ${infra_omi_id}
+infravm_ip:	${infravm_ip}				        #Infravm IP you chosen (example: 192.168.2.200)
+infravm_remote_user: ${user_infra}					#SSH user used by Ansible to connect to the ocpinfra01 server (example: fedora)
+haproxy_stat_pwd:	${haproxy_pwd}					#HAProxy stats page password (example: password)
+infravm_flavor: ${infravm_flavor}
+##### OCP clusters vars
+ocp_cluster_name: ${ocp_cluster_name}					#OCP Cluster name without special characters (example: ocp01)
+ocp_cluster_cidr: ${ocp_cluster_cidr}      				#OCP Cluster cidr (default: 10.128.0.0/14)
+ocp_service_cidr: ${ocp_service_cidr}					#OCP Cluster service cidr (default: 172.30.0.0/16)
+ocp_hostprefix:	${ocp_hostprefix}					#OCP Cluster host prefix (default: 23)
+ocp_networktype: ${ocp_networktype}					#OCP Cluster SDN Type (default: OpenShiftSDN)
+ocp_pull_secret: '${ocp_pull_secret}'                                       #OCP pull secret get on console.redhat.com with your Red hat account
+
+ocp_pub_sshkey: 'XXXX_PUBLIC_KEY_XXXXX'
+ocp_private_sshkey_path: '${ocp-key-private}'        			#Your OutScale SSH private key to place in your .ssh user directory to access to infravm
+
+## Master conf
+subnet_id_master: ${subnet_id_master}                                      #Subnet ID where is deployed OCP masters (example: subnet-xxx)
+master_count: ${master_count}						#Number of OCP master nodes (3 is the minimum for ETCD)
+master_flavor: ${master_flavor}                                        #Flavor used for OCP masters (example: tinav4.c4r8p2)
+
+## Worker conf
+subnet_id_worker: ${subnet_id_worker}                                      #Subnet ID where is deployed OCP workers (example: subnet-xxx)
+worker_count: ${worker_count}					#Number of OCP worker nodes
+worker_flavor: ${worker_flavor}                                          #Flavor used for OCP workers (example: tinav4.c4r8p2)
+
+##### OCP GitOps
+enable_gitops: ${gitops}				        #Install GitOps on your cluster : true or false

@@ -1,0 +1,29 @@
+$TTL 86400
+@	IN	SOA	dns-primary.{{ domain_name }}. admin.{{ domain_name }}. (
+                                            2020011800 ;Serial
+                                            3600 ;Refresh
+                                            1800 ;Retry
+                                            604800 ;Expire
+                                            86400 ;Minimum TTL
+)
+;Name Server Information
+@	IN	NS	dns-primary.{{ domain_name }}.
+
+;Reverse lookup for Name Server
+${element(split(".", ip_infravm),3)}		IN	PTR	dns-primary.{{ domain_name }}.
+
+;PTR Record IP address to Hostname
+${element(split(".", ip_infravm),3)}      	IN      PTR     api.{{ ocp_cluster_name }}.{{ domain_name }}.
+${element(split(".", ip_infravm),3)}      	IN      PTR     api-int.{{ ocp_cluster_name }}.{{ domain_name }}.
+;
+%{ for index, group in  ip_ocp-bootstrap~}
+${element(split(".", ip_ocp-bootstrap[index]),3)}     	IN      PTR     bootstrap${index}.{{ ocp_cluster_name }}.{{ domain_name }}.
+%{ endfor ~}
+;
+%{ for index, group in  ip_ocp-master~}
+${element(split(".", ip_ocp-master[index]),3)}	IN	PTR	master${index}.{{ ocp_cluster_name }}.{{ domain_name }}.
+%{ endfor ~}
+;
+%{ for index, group in  ip_ocp-worker~}
+${element(split(".", ip_ocp-worker[index]),3)} 	IN      PTR     worker${index}.{{ ocp_cluster_name }}.{{ domain_name }}.
+%{ endfor ~}

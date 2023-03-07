@@ -1,0 +1,121 @@
+#---------------------------------------------------------------------
+# Example configuration for a possible web application.  See the
+# full configuration options online.
+#
+#   https://www.haproxy.org/download/1.8/doc/configuration.txt
+#
+#---------------------------------------------------------------------
+
+#---------------------------------------------------------------------
+# Global settings
+#---------------------------------------------------------------------
+global
+    # to have these messages end up in /var/log/haproxy.log you will
+    # need to:
+    #
+    # 1) configure syslog to accept network log events.  This is done
+    #    by adding the '-r' option to the SYSLOGD_OPTIONS in
+    #    /etc/sysconfig/syslog
+    #
+    # 2) configure local2 events to go to the /var/log/haproxy.log
+    #   file. A line like the following can be added to
+    #   /etc/sysconfig/syslog
+    #
+    #    local2.*                       /var/log/haproxy.log
+    #
+    log         127.0.0.1 local2
+
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    maxconn     4000
+    user        haproxy
+    group       haproxy
+    daemon
+
+    # turn on stats unix socket
+    stats socket /var/lib/haproxy/stats
+
+    # utilize system-wide crypto-policies
+    #ssl-default-bind-ciphers PROFILE=SYSTEM
+    #ssl-default-server-ciphers PROFILE=SYSTEM
+
+#---------------------------------------------------------------------
+# common defaults that all the 'listen' and 'backend' sections will
+# use if not designated in their block
+#---------------------------------------------------------------------
+defaults
+    mode                    tcp
+    log                     global
+    option                  httplog
+    option                  dontlognull
+    option http-server-close
+    option forwardfor       except 127.0.0.0/8
+    option                  redispatch
+    retries                 3
+    timeout http-request    10s
+    timeout queue           1m
+    timeout connect         10s
+    timeout client          1m
+    timeout server          1m
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 3000
+#---------------------------------------------------------------------
+# main frontend which proxys to the backends
+#---------------------------------------------------------------------
+
+listen stats
+    mode http
+    bind 192.168.1.200:5000
+    stats enable
+    stats uri /stats
+    stats refresh 10s
+    stats auth admin:{{ haproxy_stat_pwd }}
+    stats admin if LOCALHOST
+
+
+frontend api
+    bind 192.168.1.200:6443
+    default_backend controlplaneapi
+
+frontend apiinternal
+    bind 192.168.1.200:22623
+    default_backend controlplaneapiinternal
+
+frontend secure
+    bind 192.168.1.200:443
+    default_backend secure
+
+frontend insecure
+    bind 192.168.1.200:80
+    default_backend insecure
+
+#---------------------------------------------------------------------
+# static backend
+#---------------------------------------------------------------------
+
+backend controlplaneapi
+    balance source
+    server bootstrap0 192.168.3.176:6443 check
+    server master0 192.168.3.222:6443 check
+    server master1 192.168.3.100:6443 check
+    server master2 192.168.3.14:6443 check
+
+backend controlplaneapiinternal
+    balance source
+    server bootstrap0 192.168.3.176:22623 check
+    server master0 192.168.3.222:22623 check
+    server master1 192.168.3.100:22623 check
+    server master2 192.168.3.14:22623 check
+
+backend secure
+    balance source
+    server worker0 192.168.3.137:443 check
+    server worker1 192.168.3.67:443 check
+    server worker2 192.168.3.31:443 check
+
+backend insecure
+    balance source
+    server worker0 192.168.3.137:80 check
+    server worker1 192.168.3.67:80 check
+    server worker2 192.168.3.31:80 check
