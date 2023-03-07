@@ -1,0 +1,30 @@
+resource "outscale_vm" "ocp-infravm" {
+  image_id = "{{ infra_omi_id }}"
+  vm_type = "{{ infravm_flavor }}"
+  security_group_ids = ["{{ sg_id }}"]
+  keypair_name = "{{ outscale_sshkey_name }}"
+  subnet_id = "{{ subnet_id_infravm }}"
+  private_ips = ["{{ infravm_ip }}"]
+  tags {
+    key = "name"
+    value = "{{ ocp_cluster_name }}-ocp-infra-vm"
+  }
+}
+
+##Create_public_ip_for_vm_ocpinfarvm
+resource "outscale_public_ip" "public_ip_ocpinfravm" {
+  tags {
+    key = "name"
+    value = "EIP_VM_OCPINFRA"
+    }
+}
+
+##Link_EIP_to_VM
+resource "outscale_public_ip_link" "public_ip_vm_link" {
+  public_ip = outscale_public_ip.public_ip_ocpinfravm.public_ip
+  vm_id = outscale_vm.ocp-infravm.vm_id
+}
+
+output "ip_address_ocp_infravm" {
+  value = outscale_vm.ocp-infravm[*].private_ip
+}

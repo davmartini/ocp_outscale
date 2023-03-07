@@ -1,0 +1,14 @@
+terraform {
+  required_providers {
+    outscale = {
+      source  = "outscale/outscale"
+      version = "0.8.2"
+    }
+  }
+}
+
+provider "outscale" {
+  access_key_id  = "{{ outscale_ak }}"
+  secret_key_id  = "{{ outscale_sk }}"
+  region         = "{{ outscale_region }}"
+}

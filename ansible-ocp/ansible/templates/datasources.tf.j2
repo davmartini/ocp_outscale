@@ -1,0 +1,12 @@
+###Cloud-init file for OCP temporary bootstrap
+data "template_file" "user_data_bootstrap" {
+  template = file("files/bootstrap_cloud-init.yaml")
+}
+###Cloud-init file for OCP master
+data "template_file" "user_data_master" {
+  template = file("files/master_cloud-init.yaml")
+}
+###Cloud-init file for OCP worker
+data "template_file" "user_data_worker" {
+  template = file("files/worker_cloud-init.yaml")
+}

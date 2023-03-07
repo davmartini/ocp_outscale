@@ -1,0 +1,380 @@
+## David Martini / Red Hat
+## dmartini@redhat.com
+#
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    boostrap_count: 1 
+    ocp_pub_sshkey: "{{ lookup('file', '$HOME/.ssh/authorized_keys') }}"
+
+  tasks:
+    
+    - name: Add vars
+      include_vars: vars/vars.yaml
+      register: vars
+
+    - name: Create Terrafrom files directory
+      file:
+        path: ../terraform/files/
+        state: directory
+        mode: '0755'
+
+    - name: Generate main TF file
+      template:
+        src: templates/main.tf.j2
+        dest: ../terraform/main.tf
+        mode: '0644'
+
+    - name: Generate datasources TF file
+      template:
+        src: templates/datasources.tf.j2
+        dest: ../terraform/datasources.tf
+        mode: '0644'
+    - name: Generate infravm TF file
+      template:
+        src: templates/infra_vm.tf.j2
+        dest: ../terraform/infra_vm.tf
+        mode: '0644'    
+
+    - name: Generate ocp_nodes TF file
+      template:
+        src: templates/ocp_nodes.tf.j2
+        dest: ../terraform/ocp_nodes.tf
+        mode: '0644'
+
+    - name: Create openshift-install directory
+      file:
+        path: files/openshift-install/
+        state: directory
+        mode: '0755'
+
+    - name: Generate OCP install-config file
+      template:
+        src: templates/install-config.yaml.j2
+        dest: files/openshift-install/install-config.yaml
+        mode: '0644'
+
+    - name: Generate OCP manifest file
+      shell: openshift-install create manifests --dir=files/openshift-install/
+
+    - name: Generate OCP ignition files
+      shell: openshift-install create ignition-configs --dir=files/openshift-install/
+
+    - name: Generate bootstrap cloud-init TF file
+      copy:
+        src: files/openshift-install/bootstrap.ign
+        dest: ../terraform/files/bootstrap_cloud-init.yaml
+        mode: '0644'
+
+    - name: Generate master cloud-init TF file
+      copy:
+        src: files/openshift-install/master.ign
+        dest: ../terraform/files/master_cloud-init.yaml
+        mode: '0644'
+
+    - name: Generate worker cloud-init TF file
+      template:
+        src: files/openshift-install/worker.ign
+        dest: ../terraform/files/worker_cloud-init.yaml
+        mode: '0644'
+
+
+    - name: Add hostname configuration to master ignition file
+      replace:
+        path: ../terraform/files/master_cloud-init.yaml
+        regexp: '"version":"3.2.0"}}'
+        replace: '"version":"3.2.0"},"storage":{"files":[{"path":"/etc/hostname","mode":420,"contents":{"source":"http://169.254.169.254/latest/meta-data/tags/name"}}]}}'
+        backup: no
+
+    - name: Add hostname configuration to worker ignition file
+      replace:
+        path: ../terraform/files/worker_cloud-init.yaml
+        regexp: '"version":"3.2.0"}}'
+        replace: '"version":"3.2.0"},"storage":{"files":[{"path":"/etc/hostname","mode":420,"contents":{"source":"http://169.254.169.254/latest/meta-data/tags/name"}}]}}'
+        backup: no
+
+    - name: Init terraform
+      shell: terraform -chdir=../terraform/ init
+
+    - name: Deploy infra with terraform
+      shell: terraform -chdir=../terraform/ apply -auto-approve
+      register: tf
+
+    - name: Print terraform
+      debug: msg={{ tf }}
+
+    - name: Pause for 160 sec to wait infra deployment
+      pause:
+        seconds: 160
+
+    - name: Generate named file
+      template:
+        src: templates/named.conf.j2
+        dest: files/named.conf
+        mode: '0644'
+
+    - name: Generate named.db file
+      template:
+        src: templates/nameddb.j2
+        dest: files/nameddb.db
+        mode: '0644'
+
+    - name: Generate named.rev file
+      template:
+        src: templates/namedrev.j2
+        dest: files/namedrev.rev
+        mode: '0644'
+
+    - name: Generate haproxy.cfg file
+      template:
+        src: templates/haproxy.j2
+        dest: files/haproxy.cfg
+        mode: '0644'
+
+    - name: Generate inventory file
+      template:
+        src: templates/inventory.j2
+        dest: inventory 
+        mode: '0644'
+
+    - name: Refresh inventory
+      meta: refresh_inventory
+
+
+- hosts: infra
+  gather_facts: no
+
+  tasks:
+
+    - name: Add vars
+      include_vars: vars/vars.yaml
+      register: vars
+      
+    - name: Install tools packages
+      dnf:
+        name: '{{ item }}'
+        state: present
+        update_cache: True
+      with_items:
+        - vim
+        - jq
+      become: yes
+
+    - name: be sure nginx is installed
+      dnf:
+        name: nginx
+        state: latest
+      tags: ntp
+      become: yes
+
+    - name: Change Nginx port from 80 to 8080 for ipv4
+      replace:
+        path: /etc/nginx/nginx.conf
+        regexp: 'listen       80'
+        replace: 'listen       8080'
+      become: yes
+
+    - name : Change Nginx port from 80 to 8080 for ipv6
+      replace:
+        path: /etc/nginx/nginx.conf
+        regexp: "[::]:80"
+        replace: "[::]:8080"
+      become: yes
+
+    - name: Copy ignition files on nginx with owner and permissions
+      copy:
+        src: files/openshift-install/{{ item }}
+        dest: /usr/share/nginx/html/
+        owner: root
+        group: root
+        mode: '0644'
+      with_items:
+        - bootstrap.ign
+        - master.ign
+        - worker.ign
+      become: yes
+
+    - name: Start service nginx, if not started
+      service:
+        name: nginx
+        state: restarted
+      become: yes
+
+    - name: be sure bind is installed
+      dnf:
+        name: '{{ item }}'
+        state: present
+        update_cache: True
+      with_items:
+        - bind
+        - bind-utils
+      become: yes
+
+    - name: Copy DNS files with owner and permissions
+      copy:
+        src: files/named.conf
+        dest: /etc/named.conf
+        owner: named
+        group: named
+        mode: '0640'
+      become: yes
+
+    - name: Copy DNS db file with owner and permissions
+      copy:
+        src : files/nameddb.db
+        dest: /var/named/{{ domain_name }}.db
+        owner: named
+        group: named
+        mode: '0640'
+      become: yes
+
+    - name: Copy DNS reverse file with owner and permissions
+      copy:
+        src: files/namedrev.rev
+        dest: /var/named/{{ domain_name }}.rev
+        owner: named
+        group: named
+        mode: '0640'
+      become: yes   
+
+    - name: Start service named, if not started
+      service:
+        name: named
+        state: restarted
+      become: yes
+
+    - name: be sure HAProxy is installed
+      dnf:
+        name: haproxy
+        state: latest
+      become: yes
+
+    - name: Copy HAProxy config file with owner and permissions
+      copy:
+        src: files/haproxy.cfg
+        dest: /etc/haproxy/haproxy.cfg
+        owner: root
+        group: root
+        mode: '0644'
+      become: yes
+
+    - name: Add SELinux port 6443 for http_port_t
+      shell: semanage port -a -t http_port_t -p tcp 6443
+      become: yes
+      ignore_errors: true
+
+    - name: Add SELinux port 22623 for http_port_t
+      shell: semanage port -a -t http_port_t -p tcp 22623
+      become: yes
+      ignore_errors: true
+
+    - name: Start service haproxy, if not started
+      service:
+        name: haproxy
+        state: restarted
+      become: yes
+
+- hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    boostrap_count: 0
+
+  environment:
+    KUBECONFIG: files/openshift-install/auth/kubeconfig
+  
+  tasks:
+
+    - name: Add vars
+      include_vars: vars/vars.yaml
+      register: vars
+
+    - name: Waiting that masters are ready (you can follow advancement on http://{{infravm_ip}}:5000/stats with admin/{{haproxy_stat_pwd}})
+      shell: oc get co openshift-controller-manager -o json |jq -r '.status.conditions[] | select(.type == "Available") | .status'
+      register: masterready
+      until: masterready.stdout == "True"
+      #debug: var=masterready.stdout_lines
+      retries: 120
+      delay: 10
+
+    - name: Waiting that workers are ready
+      shell: oc get csr |grep Pending |wc -l
+      register: csrworker
+      until: csrworker.stdout == "{{ worker_count }}"
+      retries: 120
+      delay: 10
+
+    - name: Accept CSR phase 1
+      shell: for i in `oc get csr --no-headers | grep -i pending |  awk '{ print $1 }'`; do oc adm certificate approve $i; done
+      register: csr1
+
+    - debug: msg={{ csr1.stdout }}
+
+    - name: Wait CSR phase 2
+      shell: oc get csr |grep Pending |wc -l
+      register: csrworker
+      until: csrworker.stdout == "{{ worker_count }}"
+      retries: 120
+      delay: 10
+
+    - name: Accept CSR phase 2
+      shell: for i in `oc get csr --no-headers | grep -i pending |  awk '{ print $1 }'`; do oc adm certificate approve $i; done
+      register: csr2
+
+    - debug: msg={{ csr2.stdout }}
+
+    - name: Generate new ocp_nodes TF file to delete bootstrap node
+      template:
+        src: templates/ocp_nodes.tf.j2
+        dest: ../terraform/ocp_nodes.tf
+        mode: '0644'
+
+    - name: Delete OCP bootstrap node
+      shell: terraform -chdir=../terraform/ apply -auto-approve
+
+    - name: Remove tfstate file for futur deployment
+      file:
+        path : ../terraform/{{ item }}
+        state: absent
+      with_items:
+        - terraform.tfstate
+        - terraform.tfstate.backup
+
+    - name: Waiting that the cluster is UP and running
+      shell: oc get co console -o json |jq -r '.status.conditions[] | select(.type == "Available") | .status'
+      register: clusterready
+      until: clusterready.stdout == "True"
+      retries: 60
+      delay: 10
+
+    - name: Install GitOps on your cluster
+      shell: oc apply -k ../post-install/gitops/
+      when: enable_gitops|bool == true
+      ignore_errors: true
+
+    - shell: cat files/openshift-install/auth/kubeconfig
+      register: kubeconfig
+
+    - name: Print kubeconfig file
+      debug: msg={{ kubeconfig.stdout }}
+
+    - shell: cat files/openshift-install/auth/kubeadmin-password
+      register: kubepass
+
+    - name: Cluster information
+      debug:
+        msg:
+          - "Your cluster name is : {{ ocp_cluster_name }}"
+          - "Your comain is : {{ domain_name }}"
+          - "You have {{ master_count }} masters and {{ worker_count }} workers"
+          - "OCP API URL : https://api.{{ ocp_cluster_name }}.{{ domain_name }}:6443"
+          - "OCP Console URL : https://console-openshift-console.apps.{{ ocp_cluster_name }}.{{ domain_name }}"
+          - "OCP Admin user : kubeadmin"
+          - "OCP Admin password : {{ kubepass.stdout }}"
+
+    - name: Remove tmp files
+      shell: rm -rf files/*

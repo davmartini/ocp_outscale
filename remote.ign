@@ -1,0 +1,10 @@
+{
+  "ignition": {
+    "version": "3.0.0",
+    "config": {
+      "replace": {
+        "source": "http://169.254.169.254/latest/user-data"
+      }
+    }
+  }
+}
